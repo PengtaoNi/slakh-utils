@@ -74,8 +74,13 @@ class Submixes(object):
 
         mix_wav, sr = sf.read(os.path.join(srcs_dir, 'mix.wav'))
 
-        submixes_dict = {_file_ready_string(k): [] for k in self.submix_recipes.keys()}
-        submixes_dict[self.RESIDUALS_KEY] = []
+        # submixes_dict = {_file_ready_string(k): [] for k in self.submix_recipes.keys()}
+        # submixes_dict[self.RESIDUALS_KEY] = []
+
+        submixes_dict = {
+            self.submix_name: [],
+            self.RESIDUALS_KEY: []
+        }
 
         # Use the file's metadata and the submix recipe to gather all the
         # sources together.
@@ -85,9 +90,8 @@ class Submixes(object):
 
             # Figure out which submix this source belongs to
             src_id = os.path.splitext(s)[0]
-            print(src_id)
             src_submix_name = src_metadata['stems'][src_id][self.submix_key]
-            key = self._inv_sm[src_submix_name] if src_submix_name in self._inv_sm else self.RESIDUALS_KEY
+            key = self.submix_name if src_submix_name in self._inv_sm else self.RESIDUALS_KEY
             key = _file_ready_string(key)
 
             if key not in submixes_dict.keys():
